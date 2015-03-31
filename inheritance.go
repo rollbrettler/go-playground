@@ -7,7 +7,7 @@ package main
 import "fmt"
 
 type user struct {
-	name string
+	name  string
 	email string
 }
 
@@ -19,7 +19,7 @@ type admin struct {
 func main() {
 	ad := admin{
 		user: user{
-			name: "tim",
+			name:  "tim",
 			email: "tim@example.com",
 		},
 		level: "test",
