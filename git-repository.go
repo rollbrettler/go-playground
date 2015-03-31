@@ -13,5 +13,10 @@ func main() {
     log.Println(err)
   }
   h, _ := repo.Head()
-  fmt.Println(h.Branch().Name())
+  n, _ := h.Branch().Name()
+  fmt.Printf("branch name: %v\n", n)
+
+  i, _ := repo.Index()
+  e := i.EntryCount()
+  fmt.Printf("index: %v\n", e)
 }
