@@ -14,17 +14,17 @@ func printCommitMessages(commit *git.Commit) bool {
 func main() {
 	repo, err := git.OpenRepository(".")
 	if err != nil {
-    fmt.Printf("%v\n",err)
+		fmt.Printf("%v\n", err)
 	}
 
 	walk, err := repo.Walk()
 	if err != nil {
-    fmt.Printf("%v\n",err)
+		fmt.Printf("%v\n", err)
 	}
-  // Defer gets executet after the function is finished
-  defer walk.Free()
+	// Defer gets executet after the function is finished
+	defer walk.Free()
 
-  // Push the range the walker should iterate
-  walk.PushRange("HEAD~2..HEAD")
+	// Push the range the walker should iterate
+	walk.PushRange("HEAD~2..HEAD")
 	walk.Iterate(printCommitMessages)
 }
