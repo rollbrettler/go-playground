@@ -26,7 +26,7 @@ func main() {
 	e := i.EntryCount()
 	fmt.Printf("Files in index: %v\n", e)
 
-  id, _ := headCommitId(repo)
+	id, _ := headCommitId(repo)
 	fmt.Printf("Head id: %v\n", id)
 
 	// walk, _ := repo.Walk()
