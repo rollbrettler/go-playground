@@ -7,11 +7,6 @@ import (
 	"github.com/libgit2/git2go"
 )
 
-func showCommitId(commit *git.Commit) bool {
-	fmt.Printf("%b\n", commit.Message())
-	return true
-}
-
 func main() {
 	repo, err := git.OpenRepository(".")
 	if err != nil {
@@ -28,9 +23,6 @@ func main() {
 
 	id, _ := headCommitId(repo)
 	fmt.Printf("Head id: %v\n", id)
-
-	// walk, _ := repo.Walk()
-	// walk.Iterate(showCommitId)
 }
 
 // https://github.com/pjvds/pressurizer/blob/5c48a2c630c66526e0a9a00a7c879e1c76e82be6/GitWatcher.go#L80
