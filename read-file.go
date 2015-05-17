@@ -12,6 +12,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	// Convert utf-8 binary code into utf-8 strings
 	text := string(file)
 	fmt.Println(text)
 }
