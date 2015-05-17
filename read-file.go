@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	_ "io/ioutil"
+	"io/ioutil"
 	"os"
 )
 
 func main() {
-	//f, err := ioutil.ReadFile("README.md")
-	f, err := os.Open("README.md")
+	file, err := ioutil.ReadFile("README.md")
 	if err != nil {
-		return
+		fmt.Println(err)
+		os.Exit(1)
 	}
-	fmt.Println(f.Name())
+	text := string(file)
+	fmt.Println(text)
 }
