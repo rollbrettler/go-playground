@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "fmt"
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -13,19 +13,35 @@ var repo string = "https://github.com/rollbrettler/go-playground.git"
 
 func main() {
 
-	var cloneOptions git.CloneOptions
-	cloneOptions.Bare = true
+	cloneOptions := &git.CloneOptions{
+		Bare: true,
+	}
 
 	_, err := ioutil.ReadDir(clone)
 	if err != nil {
 		log.Println(err)
 
-		_, err := git.Clone(repo, clone, &cloneOptions)
+		repository, err := git.Clone(repo, clone, cloneOptions)
 		if err != nil {
 			log.Println(err)
 			return
 		}
+		config, err := repository.Config()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		fmt.Printf("%v\n", config)
 		return
 	}
 	log.Println("Folder already cloned")
+
+	repository, err := git.OpenRepository(clone)
+	config, err := repository.Config()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	fmt.Printf("%v\n", config)
+	config.SetString("fetch", "+refs/*:refs/*")
 }
