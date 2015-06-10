@@ -42,6 +42,9 @@ func main() {
 		log.Println(err)
 		return
 	}
-	fmt.Printf("%v\n", config)
-	config.SetString("fetch", "+refs/*:refs/*")
+  fetch, err := config.LookupString("remote.origin.fetch")
+  mirror, err := config.LookupString("remote.origin.mirror")
+	fmt.Printf("%v %v\n", fetch, mirror)
+	config.SetString("remote.origin.fetch", "+refs/*:refs/*")
+	config.SetBool("remote.origin.mirror", true)
 }
