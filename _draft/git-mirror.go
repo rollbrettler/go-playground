@@ -35,10 +35,10 @@ func main() {
 		if (err != nil) {
 			log.Println(err)
 		}
-		err = updateRepository(*repository)
-		if (err != nil) {
-			log.Println(err)
-		}
+		// err = updateRepository(*repository)
+		// if (err != nil) {
+		// 	log.Println(err)
+		// }
 		fmt.Printf("%v\n", config)
 		return
 	}
@@ -73,9 +73,7 @@ func changeToMirrorConfig(config git.Config) (err error) {
 func updateRepository(repository git.Repository) (err error) {
 	remote, err := repository.LookupRemote("origin")
 	defer remote.Free()
-	err = remote.FetchRefspecs([]string{}, nil, "")
-	if(err != nil){
-		return err
-	}
+	refspecs := []string{"+refs/*:refs/*"}
+	remote.Fetch(refspecs ,nil, "")
 	return nil
 }
