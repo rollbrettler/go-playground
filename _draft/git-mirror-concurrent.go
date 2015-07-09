@@ -14,8 +14,9 @@ import (
 // }
 
 type Repo struct {
-	Url  string
-	Path string
+	Url        string
+	Path       string
+	repository *git.Repository
 }
 
 var clone string = "./test"
@@ -34,26 +35,17 @@ func main() {
 
 	os.Exit(0)
 
-	_, err := ioutil.ReadDir(clone)
-	if err != nil {
-		log.Println("Directory not pressent")
+	var err error
 
-		err := cloneRepository()
-		if err != nil {
-			log.Println(err)
-			os.Exit(1)
-		}
-	}
+	repo := Repo{Url: "https://gitlab.com/rollbrettler/go-playground.git", Path: "./test"}
 
-	log.Println("Folder already cloned")
-
-	repository, err := git.OpenRepository(clone)
+	err = repo.openRepository()
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
 
-	err = updateRepository(*repository)
+	err = repo.updateRepository()
 	if err != nil {
 		log.Println(err)
 		os.Exit(1)
@@ -69,13 +61,13 @@ func (repo Repo) cloneRepository() (err error) {
 		Bare: true,
 	}
 
-	repository, err := git.Clone(repo.Url, repo.Path, cloneOptions)
+	repo.repository, err = git.Clone(repo.Url, repo.Path, cloneOptions)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	config, err := repository.Config()
+	config, err := repo.repository.Config()
 	if err != nil {
 		log.Println(err)
 		return
@@ -86,7 +78,7 @@ func (repo Repo) cloneRepository() (err error) {
 		log.Println(err)
 	}
 
-	err = repo.updateRepository(*repository)
+	err = repo.updateRepository()
 	if err != nil {
 		log.Println(err)
 	}
@@ -115,9 +107,9 @@ func (repo Repo) changeToMirrorConfig(config git.Config) (err error) {
 	return nil
 }
 
-func (repo Repo) updateRepository(repository git.Repository) (err error) {
+func (repo Repo) updateRepository() (err error) {
 
-	remote, err := repository.LookupRemote("origin")
+	remote, err := repo.repository.LookupRemote("origin")
 	defer remote.Free()
 
 	//refspecs := []string{"+refs/*:refs/*"}
@@ -127,4 +119,27 @@ func (repo Repo) updateRepository(repository git.Repository) (err error) {
 	}
 
 	return nil
+}
+
+func (repo Repo) openRepository() (err error) {
+	_, err = ioutil.ReadDir(repo.Path)
+	if err != nil {
+		log.Println("Directory not pressent")
+
+		err := repo.cloneRepository()
+		if err != nil {
+			log.Println(err)
+			os.Exit(1)
+		}
+	}
+
+	log.Println("Folder already cloned")
+
+	repo.repository, err = git.OpenRepository(repo.Path)
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+
+	return err
 }
