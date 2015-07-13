@@ -14,13 +14,13 @@ import (
 // }
 
 type Repo struct {
-	Url        string
+	URL        string
 	Path       string
 	repository *git.Repository
 }
 
-var clone string = "./test"
-var repo string = "https://gitlab.com/rollbrettler/go-playground.git"
+var clone = "./test"
+var repo = "https://gitlab.com/rollbrettler/go-playground.git"
 
 func main() {
 
@@ -30,7 +30,7 @@ func main() {
 	// }
 	//
 	// for _, repo := range repos {
-	// 	fmt.Printf("%s -> %s\n", repo.Url, repo.Path)
+	// 	fmt.Printf("%s -> %s\n", repo.URL, repo.Path)
 	// }
 
 	os.Exit(0)
@@ -61,7 +61,7 @@ func (repo Repo) cloneRepository() (err error) {
 		Bare: true,
 	}
 
-	repo.repository, err = git.Clone(repo.Url, repo.Path, cloneOptions)
+	repo.repository, err = git.Clone(repo.URL, repo.Path, cloneOptions)
 	if err != nil {
 		log.Println(err)
 		return
