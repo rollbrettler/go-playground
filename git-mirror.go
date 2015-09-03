@@ -9,8 +9,8 @@ import (
 	"github.com/libgit2/git2go"
 )
 
-var clone string = "./test"
-var repo string = "https://gitlab.com/rollbrettler/go-playground.git"
+var clone string = "./test.git"
+var repo string = "https://github.com/libgit2/git2go.git"
 
 func main() {
 
@@ -99,7 +99,7 @@ func changeToMirrorConfig(config git.Config) (err error) {
 
 func updateRepository(repository git.Repository) (err error) {
 
-	remote, err := repository.LookupRemote("origin")
+	remote, err := repository.Remotes.Lookup("origin")
 	defer remote.Free()
 
 	refspecs := []string{"+refs/*:refs/*"}
