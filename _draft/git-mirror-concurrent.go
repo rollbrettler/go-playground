@@ -33,11 +33,9 @@ func main() {
 	// 	fmt.Printf("%s -> %s\n", repo.URL, repo.Path)
 	// }
 
-	os.Exit(0)
-
 	var err error
 
-	repo := Repo{Url: "https://gitlab.com/rollbrettler/go-playground.git", Path: "./test"}
+	repo := Repo{URL: "https://gitlab.com/rollbrettler/go-playground.git", Path: "./test.git"}
 
 	err = repo.openRepository()
 	if err != nil {
@@ -108,11 +106,10 @@ func (repo Repo) changeToMirrorConfig(config git.Config) (err error) {
 }
 
 func (repo Repo) updateRepository() (err error) {
-
-	remote, err := repo.repository.LookupRemote("origin")
+	remotes := repo.repository.Remotes
+	remote, err := remotes.Lookup("origin")
 	defer remote.Free()
 
-	//refspecs := []string{"+refs/*:refs/*"}
 	err = remote.Fetch([]string{}, nil, "")
 	if err != nil {
 		return err
@@ -124,7 +121,7 @@ func (repo Repo) updateRepository() (err error) {
 func (repo Repo) openRepository() (err error) {
 	_, err = ioutil.ReadDir(repo.Path)
 	if err != nil {
-		log.Println("Directory not pressent")
+		log.Println("Directory not present")
 
 		err := repo.cloneRepository()
 		if err != nil {
