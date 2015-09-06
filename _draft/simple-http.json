@@ -1,0 +1,16 @@
+[
+  {
+    "name": "name1",
+    "struct": {
+      "inline": "inline1",
+      "integer": 22
+    }
+  },
+  {
+    "name": "name2",
+    "struct": {
+      "inline": "inline2",
+      "integer": 23
+    }
+  }
+]
