@@ -106,8 +106,7 @@ func (repo Repo) changeToMirrorConfig(config git.Config) (err error) {
 }
 
 func (repo Repo) updateRepository() (err error) {
-	remotes := repo.repository.Remotes
-	remote, err := remotes.Lookup("origin")
+	remote, err := repo.repository.Remotes.Lookup("origin")
 	defer remote.Free()
 
 	err = remote.Fetch([]string{}, nil, "")
