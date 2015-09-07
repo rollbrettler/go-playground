@@ -7,7 +7,7 @@ import (
   "encoding/json"
 )
 
-struct JsonData {
+type JsonData struct {
   Name string `json:"name"`
   Struct struct {
     Integer int `json:"integer"`
@@ -22,7 +22,6 @@ func main() {
 func hello(writer http.ResponseWriter, reader *http.Request) {
   file, err := ioutil.ReadFile("simple-http.json")
   if err != nil {
-    file = []byte("")
     fmt.Println(err)
   }
 
@@ -30,7 +29,7 @@ func hello(writer http.ResponseWriter, reader *http.Request) {
 
   decoder := json.NewDecoder(file)
 
-  decoder.Decode(&data)
+  decoded := decoder.Decode(&data)
 
-  writer.Write(file)
+  writer.Write(decoded)
 }
