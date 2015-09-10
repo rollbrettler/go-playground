@@ -25,9 +25,8 @@ func hello(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	var data JsonData
+	var d []JsonData
 
-	json.Unmarshal(file, &data)
-
-	w.Write(data)
+	json.Unmarshal(file, &d)
+	w.Write([]byte(d[1].Name))
 }
