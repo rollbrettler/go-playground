@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"text/template"
 )
 
 type JsonData struct {
@@ -28,5 +29,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	var d []JsonData
 
 	json.Unmarshal(file, &d)
+	fmt.Printf("%#v\n%#v\n\n", r.RequestURI, d)
+
 	w.Write([]byte(d[1].Name))
 }
