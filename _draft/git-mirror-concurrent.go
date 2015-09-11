@@ -24,36 +24,37 @@ var repo = "https://gitlab.com/rollbrettler/go-playground.git"
 
 func main() {
 
-	// repos := []Repos{
-	// 	{Url: "https://gitlab.com/rollbrettler/go-playground.git", Path: "./test"},
-	// 	{Url: "https://github.com/rollbrettler/compress-videos.git", Path: "./test2"},
-	// }
-	//
-	// for _, repo := range repos {
-	// 	fmt.Printf("%s -> %s\n", repo.URL, repo.Path)
-	// }
+	repos := &[]Repo{
+		{URL: "https://gitlab.com/rollbrettler/go-playground.git", Path: "./test/go-playground.git"},
+		{URL: "https://github.com/rollbrettler/compress-videos.git", Path: "./test/compress-videos.git"},
+	}
 
 	var err error
 
-	repo := Repo{URL: "https://gitlab.com/rollbrettler/go-playground.git", Path: "./test.git"}
+	for i, repo := range *repos {
 
-	err = repo.openRepository()
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
+		fmt.Printf("#%v: %s -> %s\n", i, repo.URL, repo.Path)
 
-	err = repo.updateRepository()
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		err = repo.openRepository()
+		if err != nil {
+			log.Println(err)
+			os.Exit(1)
+		}
+
+		err = repo.updateRepository()
+		if err != nil {
+			log.Println(err)
+			os.Exit(1)
+		}
+
+		fmt.Printf("\n\n")
 	}
 
 	log.Println("Sucessfully updated")
 	os.Exit(0)
 }
 
-func (repo Repo) cloneRepository() (err error) {
+func (repo *Repo) cloneRepository() (err error) {
 
 	cloneOptions := &git.CloneOptions{
 		Bare: true,
@@ -84,7 +85,7 @@ func (repo Repo) cloneRepository() (err error) {
 	return nil
 }
 
-func (repo Repo) changeToMirrorConfig(config git.Config) (err error) {
+func (repo *Repo) changeToMirrorConfig(config git.Config) (err error) {
 
 	fetch, err := config.LookupString("remote.origin.fetch")
 	if err != nil {
@@ -105,7 +106,7 @@ func (repo Repo) changeToMirrorConfig(config git.Config) (err error) {
 	return nil
 }
 
-func (repo Repo) updateRepository() (err error) {
+func (repo *Repo) updateRepository() (err error) {
 	remote, err := repo.repository.Remotes.Lookup("origin")
 	defer remote.Free()
 
@@ -117,7 +118,7 @@ func (repo Repo) updateRepository() (err error) {
 	return nil
 }
 
-func (repo Repo) openRepository() (err error) {
+func (repo *Repo) openRepository() (err error) {
 	_, err = ioutil.ReadDir(repo.Path)
 	if err != nil {
 		log.Println("Directory not present")
