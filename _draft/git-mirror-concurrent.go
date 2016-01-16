@@ -89,18 +89,20 @@ func (repo *Repo) changeToMirrorConfig(config git.Config) (err error) {
 
 	fetch, err := config.LookupString("remote.origin.fetch")
 	if err != nil {
-		return err
+		log.Println("get remote.origin.fetch error:", err)
+		// return err
 	}
 
 	mirror, err := config.LookupBool("remote.origin.mirror")
 	if err != nil {
-		return err
+		log.Println("get remote.origin.mirror error:", err)
+		// return err
 	}
 
-	log.Println(fmt.Sprintf("Refspec: %v\n", fetch))
+	log.Println(fmt.Sprintf("Refspec: %v", fetch))
 	config.SetString("remote.origin.fetch", "+refs/*:refs/*")
 
-	log.Println(fmt.Sprintf("Mirror: %v\n", mirror))
+	log.Println(fmt.Sprintf("Mirror: %v", mirror))
 	config.SetBool("remote.origin.mirror", true)
 
 	return nil
@@ -114,6 +116,8 @@ func (repo *Repo) updateRepository() (err error) {
 	if err != nil {
 		return err
 	}
+
+	log.Println("Update repository")
 
 	return nil
 }
