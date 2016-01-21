@@ -51,48 +51,43 @@ func cloneRepository() (err error) {
 
 	repository, err := git.Clone(repo, clone, cloneOptions)
 	if err != nil {
-		log.Println(err)
+		log.Printf("Clone error: %v\n", err)
 		return
 	}
 
 	config, err := repository.Config()
 	if err != nil {
-		log.Println(err)
+		log.Printf("Get repository config error: %v\n", err)
 		return
 	}
 
 	err = changeToMirrorConfig(*config)
 	if err != nil {
-		log.Println(err)
+		log.Printf("Change config to mirror error: %v\n", err)
 	}
 
 	err = updateRepository(*repository)
 	if err != nil {
-		log.Println(err)
+		log.Printf("Update repository error: %v\n", err)
 	}
 
-	fmt.Printf("%v\n", &config)
+	fmt.Printf("%v\n", *config)
 
 	return nil
 }
 
 func changeToMirrorConfig(config git.Config) (err error) {
-
-	fetch, err := config.LookupString("remote.origin.fetch")
+	err = config.SetString("remote.origin.fetch", "+refs/*:refs/*")
 	if err != nil {
+		log.Printf("Set remote.origin.fetch error: %v\n", err)
 		return err
 	}
 
-	mirror, err := config.LookupBool("remote.origin.mirror")
+	err = config.SetBool("remote.origin.mirror", true)
 	if err != nil {
+		log.Printf("Set remote.origin.mirror error: %v\n", err)
 		return err
 	}
-
-	log.Println(fmt.Sprintf("Refspec: %v\n", fetch))
-	config.SetString("remote.origin.fetch", "+refs/*:refs/*")
-
-	log.Println(fmt.Sprintf("Mirror: %v\n", mirror))
-	config.SetBool("remote.origin.mirror", true)
 
 	return nil
 }
