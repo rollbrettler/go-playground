@@ -1,6 +1,6 @@
 // go build pinetry.go
 // encfs --extpass=./pinentry $(pwd)/encfs-test/enc $(pwd)/encfs-test/dec
-// curl -X POST -d "{\"password\": \"Start\"}" http://localhost:8001
+// curl -X POST -d '{"password": "Start"}' http://localhost:8001
 
 package main
 
@@ -22,6 +22,14 @@ func main() {
 
 func pinentry(w http.ResponseWriter, r *http.Request) {
 
+	switch r.Method {
+	case "GET":
+	case "POST":
+		handlePost(w, r)
+	}
+}
+
+func handlePost(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	var t password
