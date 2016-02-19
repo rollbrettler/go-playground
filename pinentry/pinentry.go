@@ -21,7 +21,7 @@ var htmlTemplate = `
   </head>
   <body>
     <form action="/" method="post">
-			<input name="password" />
+			<input name="password" type="password" />
 			<button>Submit pin</button>
 		</form>
   </body>
