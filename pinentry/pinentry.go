@@ -1,4 +1,5 @@
 // go build pinetry.go
+// GOOS=linux GOARCH=arm GOARM=7 go build pinentry.go
 // encfs --extpass=./pinentry $(pwd)/encfs-test/enc $(pwd)/encfs-test/dec
 // curl -X POST -d '{"password": "Start"}' http://localhost:8001
 
@@ -20,7 +21,7 @@ var htmlTemplate = `
     <title>Pinentry</title>
   </head>
   <body>
-    <form action="/" method="post">
+    <form method="post">
 			<input name="password" type="password" />
 			<button>Submit pin</button>
 		</form>
