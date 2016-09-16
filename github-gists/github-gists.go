@@ -29,6 +29,9 @@ func main() {
 	client := github.NewClient(tc)
 
 	gists, request, _ := client.Gists.List("", &github.GistListOptions{})
+
+	fmt.Println("clone_path: ~/gist-mirror")
+	fmt.Println("repositories:")
 	printGistInfos(gists)
 	for i := 2; i <= request.LastPage; i++ {
 		gists, _, _ := client.Gists.List("", &github.GistListOptions{
@@ -42,12 +45,12 @@ func printGistInfos(gists []*github.Gist) {
 	for _, gist := range gists {
 		if gist.Description != nil {
 			if *gist.Description != "" {
-				fmt.Printf("%v --> %v #%v\n", *gist.ID, *gist.GitPullURL, *gist.Description)
+				fmt.Printf("  - url: %v\n    path: %v # %v\n", *gist.GitPullURL, *gist.ID, *gist.Description)
 			} else {
-				fmt.Printf("%v --> %v\n", *gist.ID, *gist.GitPullURL)
+				fmt.Printf("  - url: %v\n    path: %v\n", *gist.GitPullURL, *gist.ID)
 			}
 		} else {
-			fmt.Printf("%v --> %v\n", *gist.ID, *gist.GitPullURL)
+			fmt.Printf("  - url: %v\n    path: %v\n", *gist.GitPullURL, *gist.ID)
 		}
 	}
 }
